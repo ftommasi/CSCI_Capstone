@@ -57,7 +57,17 @@ public class LanguageTool implements I_Lemma, I_Tokenizer, I_WordNet, I_PartOfSp
 
 	@Override
 	public List<String> tokenize(String string) {
-		return tokenizer.tokenize(string);
+		List<String> tokenized = tokenizer.tokenize(string);
+		final String[] exclusions = {",","[","]","-",".","{","}","!","@","#","$","%","^","&","*","(",")","_","+"};
+		//remove undesired tokens
+		for(String token:tokenized){
+			for(String exclusion: exclusions){
+				if(token.equals(exclusion) || token.matches("[A-Z]")){
+					tokenized.remove(token);
+				}
+			}
+		}
+		return tokenized;
 	}
 	
 	/**
