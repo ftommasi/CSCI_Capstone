@@ -28,13 +28,13 @@ import org.libreoffice.example.comp.tests.base.UnoTestCase;
  */
 public class ProjectTest extends UnoTestCase {
 
-    public void testSynonyms() {
-    	//TODO(TEAM): write tests for synonym Manager classes
-    	CASSImpl s= new CASSImpl(null);
-		String[] mine = s.getSynonym("test");
-		for(int i=0; i<mine.length; i++){
-				String output = mine[i];
-				System.out.println(output);
-		}
-    }
+//    public void testSynonyms() {
+//    	//TODO(TEAM): write tests for synonym Manager classes
+//    	CASSImpl s= new CASSImpl(null);
+//		String[] mine = s.getSynonym("test");
+//		for(int i=0; i<mine.length; i++){
+//				String output = mine[i];
+//				System.out.println(output);
+//		}
+//    }
 }

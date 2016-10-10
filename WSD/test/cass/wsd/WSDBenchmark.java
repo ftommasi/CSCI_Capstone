@@ -29,14 +29,16 @@ public class WSDBenchmark {
 				List<ScoredSense> results = wsd.scoreSensesUsing(algorithm, 0);
 				
 				int numCorrectAnswers = ts.getSenses().size();
-				double bestScore = IntStream.rangeClosed(1, numCorrectAnswers).mapToDouble(x -> ((double) 1)/x).sum();
-				// best score is based on harmonic series
-						
-				double score = IntStream.range(0, results.size())
-					.mapToObj(i -> new Pair<Integer, String>(i, results.get(i).getSense().getId()))
-					.filter(pair -> ts.getSenses().contains(pair.s))
-					.mapToDouble(pair -> ((double) 1)/(pair.t + 1))
-					.sum() / bestScore;
+				//TODO(Chris): decide what to do with JAVA 8 Test code
+//				double bestScore = IntStream.rangeClosed(1, numCorrectAnswers).mapToDouble(x -> ((double) 1)/x).sum();
+//				// best score is based on harmonic series
+//						
+				double score = 0;
+//				double score = IntStream.range(0, results.size())
+//					.mapToObj(i -> new Pair<Integer, String>(i, results.get(i).getSense().getId()))
+//					.filter(pair -> ts.getSenses().contains(pair.s))
+//					.mapToDouble(pair -> ((double) 1)/(pair.t + 1))
+//					.sum() / bestScore;
 				
 				List<String> resultIDs = new ArrayList<String>();
 				for (ScoredSense result : results) {

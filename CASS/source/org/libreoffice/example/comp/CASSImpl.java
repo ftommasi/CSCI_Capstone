@@ -2,6 +2,8 @@ package org.libreoffice.example.comp;
 
 import com.sun.star.uno.XComponentContext;
 
+import cass.libreOffice.LibreOfficeCass;
+import cass.libreOffice.WSD_Result;
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 
@@ -25,27 +27,32 @@ public final class CASSImpl extends WeakBase
     private static final String[] m_serviceNames = {
         "org.libreoffice.example.CASS" };
     
-    private String wnKey = "wordnet.database.dir";
-    private String wnValue = "/home/design/Documents/WordNet-3.0/dict/";
+    private int synonymCount;
+    private int synsetCount;
+    private String[][] synonyms;
 
-    @Override
-    public String getwnKey() {
-		return wnKey;
+    public String[][] getsynonyms() {
+    	return synonyms;
+    }
+    
+    public void setsynonyms(String[][] synonyms) {
+    	this.synonyms = synonyms;
+    }
+
+    public int getsynonymCount() {
+		return synonymCount;
 	}
 
-    @Override
-	public void setwnKey(String wnKey) {
-		this.wnKey = wnKey;
+	public void setsynonymCount(int synonymCount) {
+		this.synonymCount = synonymCount;
 	}
 
-    @Override
-	public String getwnValue() {
-		return wnValue;
+	public int getsynsetCount() {
+		return synsetCount;
 	}
 
-    @Override
-	public void setwnValue(String wnValue) {
-		this.wnValue = wnValue;
+	public void setsynsetCount(int synsetCount) {
+		this.synsetCount = synsetCount;
 	}
 
 	public CASSImpl( XComponentContext context )
@@ -86,35 +93,15 @@ public final class CASSImpl extends WeakBase
         return m_serviceNames;
     }
 
-    public String[] getSynonym(String target) {
-    	// initialize the Synset database
-		System.setProperty(getwnKey(), getwnValue());
+    public void getSynonym(String leftContext, String target, String rightContext, String language, String algorithm) {
     	
-		// TODO(Fausto): Implement and test against an open knowledge source 
-		WordNetDatabase database = WordNetDatabase.getFileInstance();		
-		Synset[] mySyns = database.getSynsets(target);
-		
-		// convert Synset to single dimension List
-		ArrayList<String> result = new ArrayList<String>();
-		for(int i=0 ; i<mySyns.length;i++){
-			String temp[] = mySyns[i].getWordForms();
-			for (int j = 0; j < temp.length; j++) {
-				result.add(temp[j]);
-			}
+    	LibreOfficeCass loc = new LibreOfficeCass(leftContext, target, rightContext, language);
+    	WSD_Result result = loc.getSynonyms(algorithm);
+    	
+    	synonymCount = result.SynonymCount;
+    	synsetCount = result.SynsetCount;
+    	synonyms = result.Synonyms;
+    	
 		}
-		// use set to remove duplicated words
-		Set<String> uniqeResult = new LinkedHashSet<>(result);
-		result.clear();
-		result.addAll(uniqeResult);
-		
-		// remove the target word
-		result.remove(target);
-		
-		// convert list to array
-		String[] arrayResult = new String[result.size()];
-		arrayResult = result.toArray(arrayResult);
-		
-		return arrayResult;
-	}
 
 }
